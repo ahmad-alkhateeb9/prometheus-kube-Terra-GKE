@@ -22,5 +22,5 @@ jobs:
         run: |-
           gcloud auth configure-docker --quiet
 
-      - name: push image
-        run: docker push gcr.io/artful-fragment-346911/myappv3:$GITHUB_SHA        
+#      - name: push image
+#        run: docker push gcr.io/artful-fragment-346911/myappv3:$GITHUB_SHA        

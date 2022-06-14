@@ -13,23 +13,26 @@ spec:
   ports:
     - name: web
       protocol: TCP
-      port: 8000
+      port: 3000
       targetPort: 3000
-  selctor:
-    app: myweb
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: mymonitoring
+  name: monitoring-node-app
   labels:
     app: myweb
 spec:
-  selector:
-    matchLabels:
-      app: myweb
-      release: prometheus
   endpoints:
   - port: web
     path: /metrics
+    targetPort: 3000
+  
+  selector:
+    matchLabels:
+      app: myweb
+    
+  namespaceSelector:
+    any: true
+  
     

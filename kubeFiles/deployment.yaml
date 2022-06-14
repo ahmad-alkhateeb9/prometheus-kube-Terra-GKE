@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: myweb
-        image: gcr.io/artful-fragment-346911/myappv3:aa7016eb4ae0da0ce5023270e6979e2b1a27a7b8
+        image: gcr.io/artful-fragment-346911/myappv3:8fdeb5acbd016b60ff01058e7d8e897f919195ee
         imagePullPolicy: Always
         ports:
           - containerPort: 3000
