@@ -1,0 +1,47 @@
+steps:
+# [DOCKER CREAT IMAGE]
+# docker tag myappv3:latest gcr.io/artful-fragment-346911/myappv3
+#--set-env-vars "TAGG=$$(cat ../.git/COMMIT_EDITMSG)"
+- name: 'gcr.io/cloud-builders/docker'
+
+  entrypoint: 'bash'
+  args: 
+      - -c
+      - |
+        docker build -t gcr.io/artful-fragment-346911/myappv3:$COMMIT_SHA .
+        docker push gcr.io/artful-fragment-346911/myappv3:$COMMIT_SHA
+
+# [KUBERNATUS APPLY FILES]
+# This step deploys the new version of our container image
+# in the hello-cloudbuild Kubernetes Engine cluster.
+#gcloud container clusters get-credentials my-sec-cluster --region us-east4 --project artful-fragment-346911
+
+
+
+- name: 'gcr.io/cloud-builders/kubectl'
+  id: Deployment
+  args: ['apply' , '-f' , 'kubeFiles/deployment.yaml']
+  env:
+  - 'CLOUDSDK_COMPUTE_REGION=us-east4'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=my-sec-cluster'
+#add image 
+- name: 'gcr.io/cloud-builders/kubectl'
+  args: ['set','image','deployment/myweb','myweb=gcr.io/artful-fragment-346911/myappv3:$COMMIT_SHA' , '-n' ,'myapp']
+  env:
+  - 'CLOUDSDK_COMPUTE_REGION=us-east4'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=my-sec-cluster'  
+#here apply the service
+- name: 'gcr.io/cloud-builders/kubectl'
+  id: Service
+  args: ['apply' , '-f' , 'kubeFiles/service.yaml' , '--validate=false']
+  env:
+  - 'CLOUDSDK_COMPUTE_REGION=us-east4'
+  - 'CLOUDSDK_CONTAINER_CLUSTER=my-sec-cluster'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+
+# 'kubeFiles/service.yaml'
+# docker tag myappv3:latest gcr.io/artful-fragment-346911/myappv3
+# docker push gcr.io/artful-fragment-346911/myappv3
