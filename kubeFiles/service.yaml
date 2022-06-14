@@ -5,14 +5,31 @@ metadata:
   labels:
     app: myweb
   name: myweb-service
-  namespace: myapp
+  namespace: default
 spec:
   selector:
     app: myweb
   type: LoadBalancer
   ports:
-    - protocol: TCP
+    - name: web
+      protocol: TCP
       port: 8000
       targetPort: 3000
-status:
-  LoadBalancer: {}
+  selctor:
+    app: myweb
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mymonitoring
+  labels:
+    app: myweb
+spec:
+  selector:
+    matchLabels:
+      app: myweb
+      release: prometheus
+  endpoints:
+  - port: web
+    path: /metrics
+    
