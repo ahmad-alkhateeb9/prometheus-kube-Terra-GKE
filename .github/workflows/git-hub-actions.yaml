@@ -24,20 +24,3 @@ jobs:
 
       - name: push image
         run: docker push gcr.io/artful-fragment-346911/myappv3:$GITHUB_SHA        
-
-      - name: connect kube
-        run: gcloud container clusters get-credentials my-sec-cluster --region us-east4 --project artful-fragment-346911
-      
-      - name: to dep namespace
-        run: kubectl apply -f kubeFiles/namespace.yaml
-
-      - name: to dep kubernetes
-        run: kubectl apply -f kubeFiles/deployment.yaml  
-
-      - name: to image kubernetes        
-        run: kubectl set image deployment/myweb myweb=gcr.io/artful-fragment-346911/myappv3:$GITHUB_SHA  -n myapp
-
-      - name: to service kubernetes
-        run: kubectl apply -f kubeFiles/service.yaml --validate=false  
-
- 
