@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myweb
+  namespace: default
+  labels:
+    app: myweb
+spec:
+  replicas: 1   
+  selector:
+    matchLabels:
+      app: myweb
+  template:
+    metadata:
+      labels:
+        app: myweb
+    spec:
+      containers:
+      - name: myweb
+        image: ahmadoosh99/ahmad:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3000
+            protocol: TCP
+            
+#args: ['cat','../.git/COMMIT_EDITMSG']

@@ -9,7 +9,6 @@ metadata:
 spec:
   selector:
     app: myweb
-  type: LoadBalancer
   ports:
     - name: web
       protocol: TCP
@@ -27,12 +26,9 @@ spec:
   - port: web
     path: /metrics
     targetPort: 3000
-  
   selector:
     matchLabels:
       app: myweb
-    
-  namespaceSelector:
-    any: true
+
   
     
